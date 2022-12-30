@@ -5,25 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Moevat",
+            "name": "Moecolor",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}\\moevat\\cli.py",
+            "program": "${workspaceFolder}\\moecolor\\main.py",
             "console": "integratedTerminal",
             "justMyCode": false,
             "args":[
-                "-i",
-                "test_data\\images",
-                "-o",
-                "test_data\\labels.json",
-                "-t",
-                "cp",
-                "-d",
-                "test_data\\my_labeled_data",
-                // "-l",
-                // "labels.yml",
-                // "-u"
-
             ]
         }
     ]
