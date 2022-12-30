@@ -1,4 +1,5 @@
 import typing
+from textwrap import wrap
 # NOT USING F STRING TO MAKE THIS COMPATIBLE WITH MOST PYTHON VERSIONS...
 
 
@@ -96,17 +97,18 @@ class FormatText:
             if color == -1:
                 color = EXTRA_COLORS.get(self.color.upper(), -1)
                 if color == -1:
-                    raise InvalidColor('Expecting a color from ' + str(list(DEFAULT_COLORS.keys())) +
-                                    ', but received [' + str(self.color) + ']. You can alternatively '+
-                                    'provide RGB (R,G,B) value for a specific color.')
-                else:
-                    pass
-            else:
-                self.color = color
+                    err_msg = 'Expecting a color from ' + str(list(DEFAULT_COLORS.keys())) + \
+                              ', but received [' + str(self.color) + '].' + \
+                              'You can alternatively provide RGB (R,G,B) value for a specific color.'
+                    err_msg = '\n' + '\n'.join(wrap(err_msg, width=100))
+                    raise InvalidColor(err_msg)
+            self.color = color
         elif isinstance(self.color, list) or isinstance(self.color, tuple):
             if len(self.color) != 3 and len(self.color) != 1:
-                raise InvalidColor('Expecting a tuple/list of RGB colors (R,G,B)/[R,G,B] ' +
-                                   'or an integer COLOR/[COLOR], but received ' + str(self.color) + '.')
+                err_msg = 'Expecting a tuple/list of RGB colors (R,G,B)/[R,G,B] ' + \
+                          'or an integer COLOR/[COLOR], but received ' + str(self.color) + '.'
+                err_msg = '\n' + '\n'.join(wrap(err_msg, width=100))     
+                raise InvalidColor(err_msg)
             else:
                 try:
                     self.color = [int(c) for c in self.color]
@@ -115,16 +117,18 @@ class FormatText:
                 else:
                     for c in self.color:
                         if c > 255 or c < 0:
-                           raise InvalidColor('Expecting a tuple/list integers between [0, 255], but received [' + str(c) +'].')
+                           raise InvalidColor('Expecting an integer between [0, 255], but received [' + str(c) +'].')
         elif isinstance(self.color, int):
             if self.color > 255 or self.color < 0:
-                raise InvalidColor('Expecting a tuple/list integers between [0, 255], but received [' + str(c) +'].')
+                raise InvalidColor('Expecting an integer between [0, 255], but received [' + str(c) +'].')
             else:
                 self.color = [self.color]
         else:
-            raise InvalidColor('Expecting a color from ' + str(list(DEFAULT_COLORS.keys())) +
-                               ' or a tuple/list of RGB colors (R,G,B)/[R,G,B] or an integer ' +
-                               'COLOR/[COLOR], but received [' + str(self.color) + '].')
+            err_msg = 'Expecting a color from ' + str(list(DEFAULT_COLORS.keys())) + \
+                      ' or a tuple/list of RGB colors (R,G,B)/[R,G,B] or an integer ' + \
+                      'COLOR/[COLOR], but received [' + str(self.color) + '].'
+            err_msg = '\n' + '\n'.join(wrap(err_msg, width=100))
+            raise InvalidColor(err_msg)
 
     def sanitize_attr(self) -> None:
         for i, t in enumerate(self.attr):
@@ -163,7 +167,7 @@ def Print(text, color: typing.Any='DEFAULT', attr: typing.Iterable=[], **kwargs)
     formatted_text = FormatText(text, color, attr=attr)
     print(formatted_text, **kwargs)
 
-Print('my formatted text', color='orange', attr=[])
+Print('my formatted text', color='osrange', attr=[])
 print('my base text', end='\n\n')
 
 #''sada
