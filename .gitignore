@@ -1,0 +1,6 @@
+dist/
+build/
+moevat.egg-info/
+venv_movevat/
+test_data/*
+__pycache__/
