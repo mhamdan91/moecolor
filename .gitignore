@@ -1,6 +1,6 @@
 dist/
 build/
-moevat.egg-info/
-venv_movevat/
+moecolor.egg-info/
+venv_moecolor/
 test_data/*
 __pycache__/

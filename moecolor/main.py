@@ -1,7 +1,6 @@
-import typing
+import typing, sys
 from textwrap import wrap
 # NOT USING F STRING TO MAKE THIS COMPATIBLE WITH MOST PYTHON VERSIONS...
-
 
 NOTE = """  Some attributes may not be supported on all terminals.
             If a specific attribute does not work, that means the
@@ -48,7 +47,7 @@ class InvalidColor(MoeColorError):
     """
 
 class FormatText:
-    def __init__(self, text, color: typing.Any='DEFAULT', attr: typing.Iterable=[], help: bool=False) -> None:
+    def __init__(self, text: str='', color: typing.Any='DEFAULT', attr: typing.Iterable=[]) -> None:
         self._text_width = 120
         self.attr = attr
         self.color = color
@@ -58,11 +57,11 @@ class FormatText:
     def __str__(self) -> str:
         return self.text
 
-    def format_text(self):
+    def format_text(self) -> None:
         self.sanitize_attr()
         self.build_string()
 
-    def build_string(self):
+    def build_string(self) -> None:
         formatted_attrs = ''
         for t in self.attr:
             if t not in ATTRIBUTES:
@@ -90,7 +89,7 @@ class FormatText:
                 pass
         return self.build_code(self.color)
 
-    def build_code(self, code):
+    def build_code(self, code) -> str:
         return CSI + str(code) + 'm'
 
     def validate_color(self) -> None:
@@ -173,9 +172,10 @@ class FormatText:
     def build_err_msg(self, err_msg) -> str:
             return ERROR_CODE + '\n' + err_msg + RESET
 
-def Print(text, color: typing.Any='DEFAULT', help=False, attr: typing.Iterable=[], **kwargs):
-    formatted_text = FormatText(text, color, attr=attr, help=help)
+
+def Print(text: str='', color: typing.Any='DEFAULT', attr: typing.Iterable=[], **kwargs):
+    formatted_text = FormatText(text, color, attr=attr)
     print(formatted_text, **kwargs)
 
-Print('my formatted text', color=[2,256,2], attr=['ss'])
-print('my base text', end='\n\n')
+LONG_DESCRIPTION = open('README.md').read()
+Print.__doc__ = LONG_DESCRIPTION
