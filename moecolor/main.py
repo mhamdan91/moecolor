@@ -1,5 +1,6 @@
 import typing, random
 from textwrap import wrap
+from os import get_terminal_size
 
 osprint = print # Save original print...
 LONG_DESCRIPTION = open('README.md').read()
@@ -13,13 +14,14 @@ NOTE = """  Some attributes may not be supported on all terminals.
 # https://en.wikipedia.org/wiki/ANSI_escape_code#CSI_(Control_Sequence_Introducer)_sequences
 CSI = '\033['
 CLEAR_SCREEN = CSI + '2J'
+DEFAULT_CURSOR_POS = CSI + '1;1H'
 RESET = '\033[0m'
 ERROR_CODE = CSI + '31m'
 ATTRIBUTES = {
                 'BOLD': 1, 'DIM': 2, 'ITALIC': 3, 'UNDERLINE': 4,
                 'BLINK': 5, 'INVERT': 7, 'HIDE': 8, 'STRIKE': 9,
                 'DOUBLE-UNDERLINE': 21, 'FOREGROUND': 38, 'BACKGROUND': 48,
-                'OVERLINED': 53, 'UNDERLINE-COLOR': 58
+                'OVERLINED': 53, 'UNDERLINE-COLOR': 58, 'CLEAR': 0
             }
 
 DEFAULT_COLORS = {
@@ -40,8 +42,6 @@ EXTRA_COLORS = {
 AVAILABLE_COLORS = {}
 AVAILABLE_COLORS.update(DEFAULT_COLORS)
 AVAILABLE_COLORS.update(EXTRA_COLORS)
-
-random_Colrr = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
 # NOT USING F STRING TO MAKE THIS COMPATIBLE WITH MOST PYTHON VERSIONS...
 class MoeColorError(Exception):
@@ -76,11 +76,15 @@ class FormatText:
 
     def build_string(self) -> None:
         formatted_attrs = ''
+        clear = ''
+        if 'CLEAR' in self.attr:
+            self.attr.remove('CLEAR')
+            clear = CLEAR_SCREEN + DEFAULT_CURSOR_POS
         for t in self.attr:
             if t not in ATTRIBUTES:
                 continue
             formatted_attrs += self.build_code(ATTRIBUTES[t])
-        self.text = formatted_attrs + self.build_color() + self.text + RESET
+        self.text = clear + formatted_attrs + self.build_color() + self.text + RESET 
 
     def build_color(self) -> str:
         self.validate_color()
@@ -115,7 +119,9 @@ class FormatText:
                   'but received [' + str(self.color) + '].'
         if isinstance(self.color, str):
             self.color = self.color.upper()
-            if self.color.startswith('#'):
+            if self.color == 'RANDOM':
+                color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+            elif self.color.startswith('#'):
                 color = self.color.lstrip('#')
                 color = tuple(int(color[i:i+2], 16) for i in (0, 2, 4))
             else:
@@ -180,6 +186,8 @@ class FormatText:
                 self.attr[i] = 'OVERLINED'
             elif attribute in ['underline-color', 'ucolor', 'u-color', 'uc']:
                 self.attr[i] = 'UNDERLINE-COLOR'
+            elif attribute in ['reset', 'reset-position', 'clear', 'clear-screen']:
+                self.attr[i] = 'CLEAR'
             else:
                 pass
 

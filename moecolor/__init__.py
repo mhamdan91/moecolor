@@ -1,4 +1,4 @@
-from .main import print, FormatText
+from .main import print, FormatText, CLEAR_SCREEN
 from .version import __version__
 __author__ = "Muhammad Hamdan <mhamdan-91@hotmail.com>"
 __copyright__ = """
