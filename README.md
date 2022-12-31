@@ -68,20 +68,20 @@ There are many options to choose from to color your text. You can:
 - If you wish to provide a hex-code for an 24-bit RGB equivelent color, you can provide a string like `#FFFFFF`.
 
 To style your text, you can use a set of pre-defined attributes:
-- 'BOLD': **bold text** (synonymous options: 'b', 'bold', 'thick')
-- 'DIM': dim text a little (synonymous options: 'dim', 'dark', 'd')
-- 'ITALIC': *italize text* (synonymous options: 'i', 'italic')
-- 'UNDERLINE': underline text, (synonymous options: 'u', 'underline')
-- 'BLINK': make text blink at less than 150 times per minute (synonymous options: 'blink', 'blinking', 'flash')
-- 'INVERT': invert text (synonymous options: 'reverse', 'invert', 'switch')
-- 'HIDE': hide text from terminal (synonymous options: 'conceal', 'hide', 'invisible')
-- 'STRIKE': ~~make text crossed-out~~, (synonymous options: 'crossed-out', 'cross-out', 'crossed-out', 'strike', 's')
-- 'DOUBLE-UNDERLINE': underline text with double lines, (synonymous options: 'double-underline', '2u', 'uu', 'du')
-- 'FOREGROUND': control foreground color [default behavior], (synonymous options: 'foreground', 'fg', 'fore-ground')
-- 'BACKGROUND': control background color [to apply color the background instead of the foreground], (synonymous options: 'background' ,'bg', 'back-ground')
-- 'OVERLINED': overline text (synonymous options: 'overlined', 'o', 'over-lined')
-- 'UNDERLINE-COLOR': apply color to underlined text, used along with underlining, otherwise no effect (synonymous options: underline-color', 'ucolor', 'u-color', 'uc')
-- 'CLEAR': clear screen, then print text. (synonymous options: 'reset', 'reset-position', 'clear', 'clear-screen')
+- **'BOLD': **bold text** (synonymous options: 'b', 'bold', 'thick')
+- **'DIM'**: dim text a little (synonymous options: 'dim', 'dark', 'd')
+- **'ITALIC'**: *italize text* (synonymous options: 'i', 'italic')
+- **'UNDERLINE'**: underline text, (synonymous options: 'u', 'underline')
+- **'BLINK'**: make text blink at less than 150 times per minute (synonymous options: 'blink', 'blinking', 'flash')
+- **'INVERT'**: invert text (synonymous options: 'reverse', 'invert', 'switch')
+- **'HIDE'**: hide text from terminal (synonymous options: 'conceal', 'hide', 'invisible')
+- **'STRIKE'**: ~~make text crossed-out~~, (synonymous options: 'crossed-out', 'cross-out', 'crossed-out', 'strike', 's')
+- **'DOUBLE-UNDERLINE'**: underline text with double lines, (synonymous options: 'double-underline', '2u', 'uu', 'du')
+- **'FOREGROUND'**: control foreground color [default behavior], (synonymous options: 'foreground', 'fg', 'fore-ground')
+- **'BACKGROUND'**: control background color [to apply color the background instead of the foreground], (synonymous options: 'background' ,'bg', 'back-ground')
+- **'OVERLINED'**: overline text (synonymous options: 'overlined', 'o', 'over-lined')
+- **'UNDERLINE-COLOR'**: apply color to underlined text, used along with underlining, otherwise no effect (synonymous options: underline-color', 'ucolor', 'u-color', 'uc')
+- **'CLEAR'**: clear screen, then print text. (synonymous options: 'reset', 'reset-position', 'clear', 'clear-screen')
 
 To show tool usage, or this README, i.e., you supply the keyword `usage` or one of its synonymous ('h', 'usage', 'show_help', 'help_me', 'use') as follows:
 ```python
@@ -95,8 +95,9 @@ help(print)
 ### REMARKS
 
 ```python
-# Note, all strings are case insensitive, so don't worry. Not just that, even if you misspell a color, we will guess it for you ;)
-# Just do NOT type `regrlue' and expect it to be blue for example, it might come up as green though.
+# Note, all strings are case insensitive, so don't worry. Not just that, even if you misspell a color,
+# we will guess it for you ;), just do NOT type `regrlue` and expect it to be blue for example,
+# it might come up as green though.
 
 """
 Some attributes may not be supported in all terminals. So, if a specific attribute does not work, that means the
