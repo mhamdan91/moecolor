@@ -68,7 +68,7 @@ There are many options to choose from to color your text. You can:
 - If you wish to provide a hex-code for an 24-bit RGB equivelent color, you can provide a string like `#FFFFFF`.
 
 To style your text, you can use a set of pre-defined attributes:
-- **'BOLD': **bold text** (synonymous options: 'b', 'bold', 'thick')
+- **'BOLD'**: **bold text** (synonymous options: 'b', 'bold', 'thick')
 - **'DIM'**: dim text a little (synonymous options: 'dim', 'dark', 'd')
 - **'ITALIC'**: *italize text* (synonymous options: 'i', 'italic')
 - **'UNDERLINE'**: underline text, (synonymous options: 'u', 'underline')
