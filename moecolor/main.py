@@ -1,9 +1,9 @@
 import typing, random
+from .README import LONG_DESCRIPTION
 from textwrap import wrap
 from os import get_terminal_size
 
 osprint = print # Save original print...
-LONG_DESCRIPTION = open('README.md').read()
 
 # Reference: https://en.wikipedia.org/wiki/ANSI_escape_code
 # https://en.wikipedia.org/wiki/ANSI_escape_code#CSI_(Control_Sequence_Introducer)_sequences

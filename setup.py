@@ -4,7 +4,7 @@ from moecolor.version import __version__
 VERSION = __version__
 DESCRIPTION = 'Python Libary to print colored and styled text in terminal. ' \
               'Offers color-specific configuration by providing 24bit hex '  \
-              'or RGB values as well 256-color mode..'
+              'or RGB values as well 256-color mode.'
 LONG_DESCRIPTION = open('README.md').read()
 setup(
     name="moecolor",

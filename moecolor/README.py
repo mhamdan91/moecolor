@@ -1,3 +1,4 @@
+LONG_DESCRIPTION="""
 Moecolor (Flexible terminal text coloring and styling)
 =======================================================
 ## Table of Contents
@@ -96,14 +97,16 @@ help(print)
 # Note, all strings are case insensitive, so don't worry. Not just that, even if you misspell a color, we will guess it for you ;)
 # Just do NOT type `regrlue' and expect it to be blue for example, it might come up as green though.
 
-"""
+\"""
 Some attributes may not be supported in all terminals. So, if a specific attribute does not work, that means the
 terminal you are using does not support it.
 
 Windows terminals (CMD, PS) support most of attributes, but the following ['blink', 'dim']
 LINUX terminals support all AFAIK
-"""
+\"""
 ```
 
 ----------------------------------------
 Author: Hamdan, Muhammad (@mhamdan91 - ©)
+
+"""
