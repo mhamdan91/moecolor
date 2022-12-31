@@ -5,6 +5,7 @@ Moecolor (Flexible terminal text coloring and styling)
  * [Overview](#overview)
  * [Library Installalion](#library-installalion)
  * [Library Usage](#library-usage)
+ * [REMARKS](#remarks)
 
 
 ## Overview
@@ -91,6 +92,7 @@ You can also display tool usage/docs using the following command:
 help(print)
 ```
 
+### REMARKS
 
 ```python
 # Note, all strings are case insensitive, so don't worry. Not just that, even if you misspell a color, we will guess it for you ;)
