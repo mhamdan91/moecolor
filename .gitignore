@@ -4,3 +4,4 @@ moecolor.egg-info/
 venv_moecolor/
 test_data/*
 __pycache__/
+test.py

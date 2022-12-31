@@ -1,8 +1,10 @@
 import os
 from setuptools import setup, find_packages
-
-VERSION = "1.0.0"
-DESCRIPTION = 'Python libary to quickly label data/images.'
+from moecolor.version import __version__
+VERSION = __version__
+DESCRIPTION = 'Python Libary to print colored and styled text in terminal. ' \
+              'Offers color-specific configuration by providing 24bit hex '  \
+              'or RGB values as well 256-color mode..'
 LONG_DESCRIPTION = open('README.md').read()
 setup(
     name="moecolor",
@@ -14,7 +16,8 @@ setup(
     long_description_content_type="text/markdown",
     long_description=LONG_DESCRIPTION,
     packages=find_packages(),
-    keywords=['python', 'gui', 'labeling', 'machine-learning', 'labeler', 'classification', 'images', 'annotation'],
+    keywords=['python', 'color', 'terminal', 'text', 'styling', 'ansi',
+              'coloring text', 'text styling', 'text formatting', 'formatting'],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",

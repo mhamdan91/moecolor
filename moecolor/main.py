@@ -1,6 +1,8 @@
-import typing, sys
+import typing, random
 from textwrap import wrap
-# NOT USING F STRING TO MAKE THIS COMPATIBLE WITH MOST PYTHON VERSIONS...
+
+osprint = print # Save original print...
+LONG_DESCRIPTION = open('README.md').read()
 
 NOTE = """  Some attributes may not be supported on all terminals.
             If a specific attribute does not work, that means the
@@ -31,9 +33,17 @@ EXTRA_COLORS = {
                     'PURPLE': (160, 32, 240),
                     'VOILET': (127, 0, 255),
                     'LIME': (50, 205, 50),
-                    'ORANGE': (255, 165, 0)
+                    'ORANGE': (255, 165, 0),
+                    'RANDOM': (0, 0, 0)
                 }
 
+AVAILABLE_COLORS = {}
+AVAILABLE_COLORS.update(DEFAULT_COLORS)
+AVAILABLE_COLORS.update(EXTRA_COLORS)
+
+random_Colrr = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+
+# NOT USING F STRING TO MAKE THIS COMPATIBLE WITH MOST PYTHON VERSIONS...
 class MoeColorError(Exception):
     def __init__(self, error):
         self.error = error
@@ -47,15 +57,18 @@ class InvalidColor(MoeColorError):
     """
 
 class FormatText:
-    def __init__(self, text: str='', color: typing.Any='DEFAULT', attr: typing.Iterable=[]) -> None:
+    def __init__(self, text: str='', color: typing.Any='DEFAULT', attr: typing.Iterable=[], usage: bool=False) -> None:
         self._text_width = 120
         self.attr = attr
         self.color = color
-        self.text = text
-        self.format_text()
+        self.text = str(text)
+        self.__help() if usage else self.format_text()
 
     def __str__(self) -> str:
         return self.text
+
+    def __help(self) -> None:
+        osprint(LONG_DESCRIPTION)
 
     def format_text(self) -> None:
         self.sanitize_attr()
@@ -93,7 +106,7 @@ class FormatText:
         return CSI + str(code) + 'm'
 
     def validate_color(self) -> None:
-        wrapped_colors = '\n     '.join(wrap(str(list(DEFAULT_COLORS.keys() )+ list(EXTRA_COLORS.keys())), width=self._text_width)) 
+        wrapped_colors = '\n     '.join(wrap(str(list(AVAILABLE_COLORS.keys())), width=self._text_width)) 
         err_msg = 'Expecting a color from the following options:\n' + \
                   '  - ' + wrapped_colors + '\n' + \
                   '  - ' + 'a hex code, e.g. \'#FFFFFF\'\n' + \
@@ -101,15 +114,16 @@ class FormatText:
                   '  - ' + 'an integer COLOR/[COLOR]\n' \
                   'but received [' + str(self.color) + '].'
         if isinstance(self.color, str):
+            self.color = self.color.upper()
             if self.color.startswith('#'):
-                color = self.color.lstrip('#').upper()
+                color = self.color.lstrip('#')
                 color = tuple(int(color[i:i+2], 16) for i in (0, 2, 4))
             else:
-                color = DEFAULT_COLORS.get(self.color.upper(), -1)
+                color = AVAILABLE_COLORS.get(self.color, -1)
                 if color == -1:
-                    color = EXTRA_COLORS.get(self.color.upper(), -1)
-                    if color == -1:
-                        raise InvalidColor(self.build_err_msg(err_msg))
+                    color = self.close_match(self.color)
+                if color == -1:
+                    raise InvalidColor(self.build_err_msg(err_msg))
             self.color = color
         elif isinstance(self.color, list) or isinstance(self.color, tuple):
             if len(self.color) != 3 and len(self.color) != 1:
@@ -172,10 +186,38 @@ class FormatText:
     def build_err_msg(self, err_msg) -> str:
             return ERROR_CODE + '\n' + err_msg + RESET
 
+    def close_match(self, word):
+        scores = {}
+        available_colors = list(AVAILABLE_COLORS.keys())
+        from collections import Counter
+        def word2vec(word):
+            # count characters in word
+            cw = Counter(word)
+            sw = set(cw)
+            # calculate word length
+            lw = sum(c*c for c in cw.values())**0.5
+            return (sw, cw, lw)
 
-def Print(text: str='', color: typing.Any='DEFAULT', attr: typing.Iterable=[], **kwargs):
-    formatted_text = FormatText(text, color, attr=attr)
-    print(formatted_text, **kwargs)
+        v1 = word2vec(word)
+        for color in available_colors:
+            v2 = word2vec(color)
+            shared = v1[0].intersection(v2[0])
+            # Cos(x, y) = x . y / ||x|| * ||y||
+            scores[color] = sum(v1[1][ch]*v2[1][ch] for ch in shared)/v1[2]/v2[2]
+        scores = sorted(scores.items(), key=lambda item:item[1], reverse=True)
+        return AVAILABLE_COLORS[scores[0][0]] if scores[0][1] > 0.5 else -1
 
-LONG_DESCRIPTION = open('README.md').read()
-Print.__doc__ = LONG_DESCRIPTION
+def print(text: str='', color: typing.Any='DEFAULT', attr: typing.Iterable=[], **kwargs):
+    usage = False
+    possible_help = ['help', 'usage', 'show_help', 'help_me', 'use']
+    if set(possible_help).intersection(kwargs):
+        for h in possible_help:
+            if h in kwargs:
+                del kwargs[h]
+        usage = True 
+    formatted_text = FormatText(text, color, attr=attr, usage=usage)
+    if not usage:
+        osprint(formatted_text, **kwargs)
+
+print.__doc__ = LONG_DESCRIPTION
+FormatText.__doc__ = LONG_DESCRIPTION
