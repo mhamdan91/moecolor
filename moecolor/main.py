@@ -5,18 +5,17 @@ from os import get_terminal_size
 osprint = print # Save original print...
 LONG_DESCRIPTION = open('README.md').read()
 
-NOTE = """  Some attributes may not be supported on all terminals.
-            If a specific attribute does not work, that means the
-            terminal you are using does not support it.
-       """
-
 # Reference: https://en.wikipedia.org/wiki/ANSI_escape_code
 # https://en.wikipedia.org/wiki/ANSI_escape_code#CSI_(Control_Sequence_Introducer)_sequences
+BEL = '\a'
 CSI = '\033['
+ESC = '\033'
+OSC = '\033]'
+RESET = CSI + '0m'
+ERROR_CODE = CSI + '31m'
 CLEAR_SCREEN = CSI + '2J'
 DEFAULT_CURSOR_POS = CSI + '1;1H'
-RESET = '\033[0m'
-ERROR_CODE = CSI + '31m'
+
 ATTRIBUTES = {
                 'BOLD': 1, 'DIM': 2, 'ITALIC': 3, 'UNDERLINE': 4,
                 'BLINK': 5, 'INVERT': 7, 'HIDE': 8, 'STRIKE': 9,
@@ -28,7 +27,7 @@ DEFAULT_COLORS = {
                     'BLACK': 30, 'RED': 31, 'GREEN': 32, 'YELLOW': 33, 'BLUE': 34,
                     'MAGENTA': 35, 'CYAN': 36, 'BRIGHT_GRAY': 37, 'DEFAULT': 39,
                     'DARK_GRAY': 90, 'BRIGHT_RED': 91, 'BRIGHT_GREEN': 92, 'BRIGHT_YELLOW': 93,
-                    'BRIGHT_BLUE': 94,'BRIGHT_MAGENTA': 95, 'BRIGHT_CYAN': 96, 'WHITE': 97, 
+                    'BRIGHT_BLUE': 94,'BRIGHT_MAGENTA': 95, 'BRIGHT_CYAN': 96, 'WHITE': 97,
                 }
 
 EXTRA_COLORS = {
@@ -84,7 +83,7 @@ class FormatText:
             if t not in ATTRIBUTES:
                 continue
             formatted_attrs += self.build_code(ATTRIBUTES[t])
-        self.text = clear + formatted_attrs + self.build_color() + self.text + RESET 
+        self.text = clear + formatted_attrs + self.build_color() + self.text + RESET
 
     def build_color(self) -> str:
         self.validate_color()
@@ -110,7 +109,7 @@ class FormatText:
         return CSI + str(code) + 'm'
 
     def validate_color(self) -> None:
-        wrapped_colors = '\n     '.join(wrap(str(list(AVAILABLE_COLORS.keys())), width=self._text_width)) 
+        wrapped_colors = '\n     '.join(wrap(str(list(AVAILABLE_COLORS.keys())), width=self._text_width))
         err_msg = 'Expecting a color from the following options:\n' + \
                   '  - ' + wrapped_colors + '\n' + \
                   '  - ' + 'a hex code, e.g. \'#FFFFFF\'\n' + \
@@ -222,12 +221,10 @@ def print(text: str='', color: typing.Any='DEFAULT', attr: typing.Iterable=[], *
         for h in possible_help:
             if h in kwargs:
                 del kwargs[h]
-        usage = True 
+        usage = True
     formatted_text = FormatText(text, color, attr=attr, usage=usage)
     if not usage:
         osprint(formatted_text, **kwargs)
 
 print.__doc__ = LONG_DESCRIPTION
 FormatText.__doc__ = LONG_DESCRIPTION
-
-print('My example text as green', color='red', attr=['i', 'blink'])
