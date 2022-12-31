@@ -160,7 +160,7 @@ class FormatText:
         for i, t in enumerate(self.attr):
             attribute = str(t).lower()
             attribute = attribute.replace(' ', '-')
-            if attribute in ['b', 'bold']:
+            if attribute in ['b', 'bold', 'thick']:
                 self.attr[i] = 'BOLD'
             elif attribute in ['dim', 'dark', 'd']:
                 self.attr[i] = 'DIM'
@@ -172,7 +172,7 @@ class FormatText:
                 self.attr[i] = 'BLINK'
             elif attribute in ['reverse', 'invert', 'switch']:
                 self.attr[i] = 'INVERT'
-            elif attribute in ['conceal', 'hide']:
+            elif attribute in ['conceal', 'hide', 'invisible']:
                 self.attr[i] = 'HIDE'
             elif attribute in ['crossed-out', 'cross-out', 'crossed-out', 'strike', 's']:
                 self.attr[i] = 'STRIKE'
@@ -217,7 +217,7 @@ class FormatText:
 
 def print(text: str='', color: typing.Any='DEFAULT', attr: typing.Iterable=[], **kwargs):
     usage = False
-    possible_help = ['help', 'usage', 'show_help', 'help_me', 'use']
+    possible_help = ['h', 'usage', 'show_help', 'help_me', 'use']
     if set(possible_help).intersection(kwargs):
         for h in possible_help:
             if h in kwargs:
@@ -229,3 +229,5 @@ def print(text: str='', color: typing.Any='DEFAULT', attr: typing.Iterable=[], *
 
 print.__doc__ = LONG_DESCRIPTION
 FormatText.__doc__ = LONG_DESCRIPTION
+
+print('My example text as green', color='red', attr=['i', 'blink'])

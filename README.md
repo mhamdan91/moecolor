@@ -1,5 +1,5 @@
-Moevat (Moe visual annotation tool)
-=======================================
+Moecolor (Terminal text coloring and styling)
+=============================================
 ## Table of Contents
 
  * [Overview](#overview)
@@ -8,8 +8,8 @@ Moevat (Moe visual annotation tool)
 
 
 ## Overview
-This tool allows you to quickly label images of up to 10 classes and this is basically because we  only have 10 numbers in NumPad :(O). If you have more than 10 classes, you can choose one class to be all others and reclassfiy others afterwards. This tool is meant for quick labeling and is not meant to be an extensive and manually controlled GUI.
-
+This lightweight tool allows to color terminal text and style it based on predefined attributes. The tool works very much like the `print` function.
+Except it is a fancier print that you can do a lot more with to control text color and style.
 
 ## Library Installalion
 To install the library simply run the following command in a cmd, shell or whatever...
@@ -18,80 +18,80 @@ To install the library simply run the following command in a cmd, shell or whate
 # It's recommended to create a virtual environment
 
 # Windows
-pip install moevat
+pip install moecolor
 
 # Linux
-pip3 install moevat
+pip3 install moecolor
 ```
 
 ## Library usage?
-To use this tool you need to provide:
-- To show usage message run the following command `moevat -u`
-- a directory containing images to label.
-- an output file path to store labeled images in and this file can only be of type [json, csv]
-- If you mislabel an image and wish to correct this, simply go back to that image and apply the new label.
-- If you wish to copy or move labeled images after completing labeling, you must specify the
-  `data-transfer` option where (**cp** -> copy, and **mv** -> move). You also need to specify a
-  destination folder to transfer images to, this would be specifying the `dst-folder` option.
-- If you wish to resize window size that displays image and labeling instructions, you can
-  provide an integer value that is greater than 0. This value will translate into a percentage,
-  e.g [60] == 60% of the original image size and [200] == 200% of the original image size.
-- By default the tool will display the class names along with their human readable labels if
-  you provide a labels.yaml file. This file contains classes and human readable labels in
-  the following format: (See example: [labels.yaml](https://github.com/mhamdan91/moevat/blob/main/labels.yml))
-```yaml
-    # ** Good class names **
-    classes:
-        0: "dog"
-        1: "cat"
-        2: "horse"
-        3: "mouse"
-        4: "rabbit"
-        5: "bird"
-        6: "car"
-        7: "human"
-        8: "elephant"
-        9: "house"
-
-    # ** Okay class names **
-    classes:
-        0: "brown dog"
-        1: "small cat"
-        2: "original horse"
-        3: "black mouse"
-        4: "white rabbit"
-        5: "big bird"
-        6: "red car"
-        7: "tall human"
-        8: "tiny elephant"
-        9: "huge house"
-
-    # ** Bad class names **
-    classes:
-        0: "dog is barking at the mailman"
-        1: "cat is sleeping deeply"
-        2: "horse is racing very fast"
-        3: "mouse is ticking extremely fast"
-        4: "rabbit is jumping around"
-        5: "bird is flying"
-        6: "car is very ice"
-        7: "human is playing well"
-        8: "elephant is too huge to move"
-        9: "house without windows"
+The following examples shows how to print text in `green` in so many different ways:
+```python
+from moecolor import print
+print('My example text as green', color='green')
+print('My example text as green', color='#00FF00')
+print('My example text as green', color=(0, 255, 0))
+print('My example text as green', color=(10,))
+print('My example text as green', color=10)
 ```
-- The tool will allow you navigate forward and backward, by default the tool allows you loop through
-  images as long as you not labeled them all. This means you can start from **left -> right** or
-  **right -> left**, i.e. from **last-image --> first-image** or from **first-image -> last-image**.
-- The tool will automatically cache data while you are labeling, and if you wish to end your labeling
-  session, simply click on **ESCAPE**.
-- If you wish to resume labeling from where you stopped last time, simply provide the labels file which
-  you used in the previous session and the tool will only show images that have not been labeled yet.
+
+The following example shows how to underline, cross-out, bold, italize, a red text:
+```python
+from moecolor import print
+print('My example text as green', color='red', attr=['bold', 'italic', 'strike', 'underline'])
+```
+
+### Usage Guidelines
+The tool simply overloads the `print` function, so you can use it as a normal print or if you like to color the text you can provide extra arguments.
+The tool accepts the following arguments in addition to the kwargs accepted by the builtin `print` function.
+- color
+- attr
+- usage
+
+You can so many options to choose from to color your text. You can:
+- Choose a color string from a list of pre-defined colors ['BLACK', 'RED', 'GREEN', 'YELLOW', 'BLUE', 'MAGENTA', 'CYAN', 'BRIGHT_GRAY', 'DEFAULT', 'DARK_GRAY',
+  'BRIGHT_RED', 'BRIGHT_GREEN', 'BRIGHT_YELLOW', 'BRIGHT_BLUE', 'BRIGHT_MAGENTA', 'BRIGHT_CYAN','WHITE', 'PURPLE', 'VOILET', 'LIME', 'ORANGE', 'RANDOM']
+- If you wish to generate a random color, you can supply the word: 'RANDOM'.
+- If you wish to pick a color from 256-color mode scale based on `https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit`, you can provide an integer between [0-255]
+- If you wish to provide an RGB value for a specific 24-bit color, you provide a tuple/list of RGB values: (R, G, B) and numbers must be integers between [0-255]
+- If you wish to provide a hex-code for an 24-bit RGB equivelent color, you can provide a string like `#FFFFFF`.
+
+To style your text, you can use a set of pre-defined attributes:
+- 'BOLD': **bolds text** (synonymous options: 'b', 'bold', 'thick')
+- 'DIM': dmis text a little (synonymous options: 'dim', 'dark', 'd')
+- 'ITALIC': *italize text* (synonymous options: 'i', 'italic')
+- 'UNDERLINE': underlines text, (synonymous options: 'u', 'underline')
+- 'BLINK': makes text blink at less than 150 times per minute (synonymous options: 'blink', 'blinking', 'flash')
+- 'INVERT': inverts text (synonymous options: 'reverse', 'invert', 'switch')
+- 'HIDE': hide text from terminal (synonymous options: 'conceal', 'hide', 'invisible')
+- 'STRIKE': ~~makes text crossed-out~~, (synonymous options: 'crossed-out', 'cross-out', 'crossed-out', 'strike', 's')
+- 'DOUBLE-UNDERLINE': underline text with double lines, (synonymous options: 'double-underline', '2u', 'uu', 'du')
+- 'FOREGROUND': controls foreground color [default behavior], (synonymous options: 'foreground', 'fg', 'fore-ground')
+- 'BACKGROUND': controls background color [to apply color the background instead of the foreground], (synonymous options: 'background' ,'bg', 'back-ground')
+- 'OVERLINED': overlines text (synonymous options: 'overlined', 'o', 'over-lined')
+- 'UNDERLINE-COLOR': applies color to underlined text, used along with underlining, otherwise no effect (synonymous options: underline-color', 'ucolor', 'u-color', 'uc')
+- 'CLEAR': clear screen, then print text. (synonymous options: 'reset', 'reset-position', 'clear', 'clear-screen')
+
+To show tool usage, or this README, i.e., you supply the keyword `usage` or one of its synonymous ('h', 'usage', 'show_help', 'help_me', 'use') as follows:
+```python
+print(usage=True)
+```
+You can also display tool usage using the following command
+```python
+help(print)
+```
 
 
-### Example use
-Example use (in a terminal run the following command):
-```bash
-moevat -i <images_dir> -o <output_file_path.csv> -t <cp_or_mv> -d <destination_folder> -l <path_to_labels.yaml>
+```python
+# Note, all strings are case insensitive, you don't worry :)
+
+"""
+Some attributes may not be supported in all terminals. So, if a specific attribute does not work, that means the
+terminal you are using does not support it. 
+
+Windows terminals (CMD, PS) support most of attributes, but the following ['blink', 'dim']
+LINUX terminals support all AFAIK
+"""
 ```
 
 ----------------------------------------
