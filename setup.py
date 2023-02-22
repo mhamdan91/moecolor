@@ -10,7 +10,7 @@ setup(
     name="moecolor",
     version=VERSION,
     author="mhamdan91 (Hamdan, Muhammad)",
-    author_email="<mhamdan-91@hotmail.com>",
+    author_email="<mhamdan.dev@gmail.com>",
     url='https://github.com/mhamdan91/moecolor',
     description=DESCRIPTION,
     long_description_content_type="text/markdown",
