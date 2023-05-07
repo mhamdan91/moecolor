@@ -207,10 +207,14 @@ class FormatText:
 
         v1 = word2vec(word)
         for color in available_colors:
-            v2 = word2vec(color)
-            shared = v1[0].intersection(v2[0])
-            # Cos(x, y) = x . y / ||x|| * ||y||
-            scores[color] = sum(v1[1][ch]*v2[1][ch] for ch in shared)/v1[2]/v2[2]
+            try:
+                v2 = word2vec(color)
+                shared = v1[0].intersection(v2[0])
+                # Cos(x, y) = x . y / ||x|| * ||y||
+                score = sum(v1[1][ch]*v2[1][ch] for ch in shared) / v1[2]/v2[2]
+            except Exception:
+                score = 0.5
+            scores[color] = score
         scores = sorted(scores.items(), key=lambda item:item[1], reverse=True)
         return AVAILABLE_COLORS[scores[0][0]] if scores[0][1] > 0.5 else -1
 
@@ -219,9 +223,13 @@ def print(text: str='', *args, color: typing.Any='', attr: typing.Iterable=[], *
     if set(possible_help).intersection(kwargs):
         osprint(LONG_DESCRIPTION)
         return
-    text = (text + ' ' + ' '.join(args)).strip()
-    ft = FormatText(text, color, attr=attr) if color or attr else text
-    osprint(ft, **kwargs)
+    try:
+        text = (str(text) + ' ' + ' '.join(args)).strip()
+        ft = FormatText(text, color, attr=attr) if color or attr else text
+    except:
+        osprint(text, **kwargs)
+    else:
+        osprint(ft, **kwargs)
 
 print.__doc__ = LONG_DESCRIPTION
 FormatText.__doc__ = LONG_DESCRIPTION
