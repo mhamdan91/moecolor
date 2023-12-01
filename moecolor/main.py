@@ -3,6 +3,8 @@ sys.path.append(os.path.dirname(__file__))
 from .README import LONG_DESCRIPTION
 from textwrap import wrap
 from os import get_terminal_size
+# Use colorama for CMD and PS on windows...
+from colorama import init, deinit
 
 osprint = print # Save original print...
 os.system("") # Initialize windows terminals that support ANSI with escapes
@@ -72,8 +74,10 @@ class FormatText:
         osprint(LONG_DESCRIPTION)
 
     def format_text(self) -> None:
+        init()
         self.sanitize_attr()
         self.build_string()
+        deinit()
 
     def build_string(self) -> None:
         formatted_attrs = ''
@@ -225,6 +229,7 @@ def print(text: str='', *args, color: typing.Any='', attr: typing.Iterable=[], *
     if set(possible_help).intersection(kwargs):
         osprint(LONG_DESCRIPTION)
         return
+    init()
     try:
         text = (str(text) + ' ' + ' '.join(args)).strip()
         ft = FormatText(text, color, attr=attr) if color or attr else text
@@ -232,6 +237,8 @@ def print(text: str='', *args, color: typing.Any='', attr: typing.Iterable=[], *
         osprint(text, **kwargs)
     else:
         osprint(ft, **kwargs)
+    deinit()
+
 
 print.__doc__ = LONG_DESCRIPTION
 FormatText.__doc__ = LONG_DESCRIPTION
