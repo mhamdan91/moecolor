@@ -1,9 +1,11 @@
-import typing, random
+import typing, random, sys, os
+sys.path.append(os.path.dirname(__file__))
 from .README import LONG_DESCRIPTION
 from textwrap import wrap
 from os import get_terminal_size
 
 osprint = print # Save original print...
+os.system("") # Initialize windows terminals that support ANSI with escapes
 
 # Reference: https://en.wikipedia.org/wiki/ANSI_escape_code
 # https://en.wikipedia.org/wiki/ANSI_escape_code#CSI_(Control_Sequence_Introducer)_sequences
