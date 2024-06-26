@@ -220,19 +220,20 @@ class FormatText:
         scores = sorted(scores.items(), key=lambda item:item[1], reverse=True)
         return AVAILABLE_COLORS[scores[0][0]] if scores[0][1] > 0.5 else -1
 
-def print(text: str='', *args, color: typing.Any='', attr: typing.Iterable=[], **kwargs):
+def print(*args, color: typing.Any='', attr: typing.Iterable=[], **kwargs):
     possible_help = ['h', 'usage', 'show_help', 'help_me', 'use', 'help']
     if set(possible_help).intersection(kwargs):
         osprint(LONG_DESCRIPTION)
         return
     try:
-        text = (str(text) + ' ' + ' '.join(args)).strip()
-        ft = FormatText(text, color, attr=attr) if color or attr else text
+        if color or attr:
+            text = ' '.join([str(arg) for arg in args])
+            ft = FormatText(text, color, attr=attr).text
+            osprint(ft, **kwargs)
+        else:
+            osprint(*args, **kwargs)
     except:
-        osprint(text, **kwargs)
-    else:
-        osprint(ft, **kwargs)
-
+        osprint(*args, **kwargs)
 
 print.__doc__ = LONG_DESCRIPTION
 FormatText.__doc__ = LONG_DESCRIPTION
